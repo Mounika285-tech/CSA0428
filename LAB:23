@@ -1,0 +1,15 @@
+#include <stdio.h>
+
+#define MAX_BLOCKS 100
+
+void firstFit(int blockSize[], int m, int processSize[], int n) {
+    int allocation[MAX_BLOCKS];
+
+    // Initialize all allocations as -1 (indicating no allocation)
+    for (int i = 0; i < n; i++) {
+        allocation[i] = -1;
+    }
+
+    // Iterate through each process
+    for (int i = 0; i < n; i++) {
+        for (int j =

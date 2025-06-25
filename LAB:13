@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define SIZE 5
+
+int main() {
+    // Static allocation
+    int staticArray[SIZE] = {1, 2, 3, 4, 5};
+    
+    // Stack allocation
+    int stackArray[SIZE];
+    for (int i = 0; i < SIZE; i++) {
+        stackArray[i] = i + 1;
+    }
+
+    // Dynamic allocation
+    int *dynamicArray = (int *)malloc(SIZE * sizeof(int));
+    if (dynamicArray == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return 1;
+    }
+    for (int i = 0; i < SIZE; i++) {
+        dynamicArray[i] = (i + 1) * 10;
+    }
+
+    // Displaying the arrays
+    printf("Static Array: ");
+    for (int i = 0; i < SIZE; i++) {
+        printf("%d ", staticArray[i]);
+    }
+    printf("\nStack Array: ");
+    for (int i = 0; i < SIZE; i++) {
+        printf("%d ", stackArray[i]);
+    }
+    printf("\nDynamic Array: ");
+    for (int i = 0; i < SIZE; i++) {
+        printf("%d ", dynamicArray[i]);
+    }
+    
+    // Freeing dynamic memory
+    free(dynamicArray);
+    
+    return 0;
+}

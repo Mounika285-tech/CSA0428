@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <string.h>
+
+void grep(const char *filename, const char *pattern) {
+    FILE *file = fopen(filename, "r");
+    char line[256];
+
+    if (file == NULL) {
+        perror("Error opening file");
+        return;
+    }
+
+    while (fgets(line, sizeof(line), file)) {
+        if (strstr(line, pattern) != NULL) {
+            printf("%s", line);
+        }
+    }
+
+    fclose(file);
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
+        fprintf(stderr, "Usage: %s <filename> <pattern>\n", argv[0]);
+        return 1;
+    }
+
+    grep(argv[1], argv[2]);
+    return 0;
+}

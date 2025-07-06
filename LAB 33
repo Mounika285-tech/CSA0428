@@ -1,0 +1,54 @@
+#include <stdio.h>
+
+#define MAX_FRAMES 10
+
+int findOptimalPage(int pages[], int pageIndex, int frames[], int numFrames, int totalPages) {
+    int farthest = pageIndex;
+    int index = -1;
+
+    for (int i = 0; i < numFrames; i++) {
+        int j;
+        for (j = pageIndex; j < totalPages; j++) {
+            if (frames[i] == pages[j]) {
+                if (j > farthest) {
+                    farthest = j;
+                    index = i;
+                }
+                break;
+            }
+        }
+        if (j == totalPages) {
+            return i; // This frame is not used anymore
+        }
+    }
+    return (index == -1) ? 0 : index; // If all frames are used
+}
+
+void optimalPageReplacement(int pages[], int totalPages, int numFrames) {
+    int frames[MAX_FRAMES] = {0};
+    int pageFaults = 0;
+
+    for (int i = 0; i < totalPages; i++) {
+        int j;
+        for (j = 0; j < numFrames; j++) {
+            if (frames[j] == pages[i]) {
+                break; // Page is already in a frame
+            }
+        }
+        if (j == numFrames) { // Page fault occurs
+            int replaceIndex = findOptimalPage(pages, i + 1, frames, numFrames, totalPages);
+            frames[replaceIndex] = pages[i];
+            pageFaults++;
+        }
+    }
+    printf("Total Page Faults: %d\n", pageFaults);
+}
+
+int main() {
+    int pages[] = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2};
+    int totalPages = sizeof(pages) / sizeof(pages[0]);
+    int numFrames = 3;
+
+    optimalPageReplacement(pages, totalPages, numFrames);
+    return 0;
+}

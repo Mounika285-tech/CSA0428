@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define FRAME_SIZE 3 // Number of frames in memory
+
+void simulateLRU(int pages[], int n) {
+    int frame[FRAME_SIZE], pageFaults = 0, i, j, k, flag;
+
+    // Initialize frames
+    for (i = 0; i < FRAME_SIZE; i++) {
+        frame[i] = -1; // -1 indicates an empty frame
+    }
+
+    for (i = 0; i < n; i++) {
+        flag = 0;
+
+        // Check if page is already in frame
+        for (j = 0; j < FRAME_SIZE; j++) {
+            if (frame[j] == pages[i]) {
+                flag = 1; // Page hit
+                break;
+            }
+        }
+
+        // If page is not found, we have a page fault
+        if (!flag) {
+            pageFaults++;
+            // Find the least recently used page
+            int lruIndex = 0;
+            for (k = 1; k < FRAME_SIZE; k++) {
+                if (frame[k] == -1) {
+                    lruIndex = k; // Empty frame found
+                    break;
+                }
+                if (frame[lruIndex] < frame[k]) {
+                    lruIndex = k; // Update to least recently used
+                }
+            }
+            frame[lruIndex] = pages[i]; // Replace LRU page
+        }
+    }
+
+    printf("Total Page Faults: %d\n", pageFaults);
+}
+
+int main() {
+    int pages[] = {7, 0, 1, 2, 0, 3, 0, 4, 2, 3};
+    int n = sizeof(pages) / sizeof(pages[0]);
+    simulateLRU(pages, n);
+    return 0;
+}

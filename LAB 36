@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Block {
+    char data[256]; // Data stored in the block
+    struct Block* next; // Pointer to the next block
+} Block;
+
+typedef struct File {
+    Block* first; // Pointer to the first block
+    Block* last; // Pointer to the last block
+} File;
+
+// Function to create a new block
+Block* createBlock(const char* data) {
+    Block* newBlock = (Block*)malloc(sizeof(Block));
+    strcpy(newBlock->data, data);
+    newBlock->next = NULL;
+    return newBlock;
+}
+
+// Function to add a block to the file
+void addBlock(File* file, const char* data) {
+    Block* newBlock = createBlock(data);
+    if (file->last) {
+        file->last->next = newBlock; // Link the new block
+    } else {
+        file->first = newBlock; // First block
+    }
+    file->last = newBlock; // Update last block pointer
+}
+
+// Function to display the file contents
+void displayFile(File* file) {
+    Block* current = file->first;
+    while (current) {
+        printf("%s -> ", current->data);
+        current = current->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    File myFile = {NULL, NULL}; // Initialize file
+    addBlock(&myFile, "Block 1");
+    addBlock(&myFile, "Block 2");
+    addBlock(&myFile, "Block 3");
+
+    displayFile(&myFile); // Display the linked blocks
+    return 0;
+}

@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+#define MAX_RECORDS 100
+
+void displayRecords(char records[][50], int count) {
+    for (int i = 0; i < count; i++) {
+        printf("Record %d: %s\n", i + 1, records[i]);
+    }
+}
+
+int main() {
+    char records[MAX_RECORDS][50];
+    int count = 0;
+    char input[50];
+
+    printf("Enter records (type 'exit' to stop):\n");
+    while (count < MAX_RECORDS) {
+        printf("Record %d: ", count + 1);
+        fgets(input, sizeof(input), stdin);
+        if (strncmp(input, "exit", 4) == 0) {
+            break;
+        }
+        strncpy(records[count], input, sizeof(records[count]));
+        count++;
+    }
+
+    printf("\nAll Records:\n");
+    displayRecords(records, count);
+
+    return 0;
+}

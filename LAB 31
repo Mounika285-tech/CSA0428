@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define FRAME_SIZE 3 // Number of frames in memory
+
+void fifoPaging(int pages[], int n) {
+    int frame[FRAME_SIZE];
+    int pageFaults = 0, index = 0, i, j;
+    int isPageInFrame;
+
+    // Initialize frames
+    for (i = 0; i < FRAME_SIZE; i++) {
+        frame[i] = -1; // -1 indicates an empty frame
+    }
+
+    for (i = 0; i < n; i++) {
+        isPageInFrame = 0;
+
+        // Check if page is already in frame
+        for (j = 0; j < FRAME_SIZE; j++) {
+            if (frame[j] == pages[i]) {
+                isPageInFrame = 1;
+                break;
+            }
+        }
+
+        // If page is not in frame, replace the oldest page
+        if (!isPageInFrame) {
+            frame[index] = pages[i];
+            index = (index + 1) % FRAME_SIZE; // Move to the next frame
+            pageFaults++;
+        }
+
+        // Display current frame status
+        printf("Current frame: ");
+        for (j = 0; j < FRAME_SIZE; j++) {
+            printf("%d ", frame[j]);
+        }
+        printf("\n");
+    }
+
+    printf("Total Page Faults: %d\n", pageFaults);
+}
+
+int main() {
+    int pages[] = {7, 0, 1, 2, 0, 3, 0, 4}; // Example page reference string
+    int n = sizeof(pages) / sizeof(pages[0]);
+
+    fifoPaging(pages, n);
+    return 0;
+}

@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define BLOCK_SIZE 10
+#define NUM_BLOCKS 5
+
+typedef struct {
+    int index[NUM_BLOCKS];
+    char data[NUM_BLOCKS][BLOCK_SIZE];
+} FileSystem;
+
+void initializeFileSystem(FileSystem *fs) {
+    for (int i = 0; i < NUM_BLOCKS; i++) {
+        fs->index[i] = i; // Pointing to the block number
+        snprintf(fs->data[i], BLOCK_SIZE, "Block %d data", i);
+    }
+}
+
+void displayFileSystem(FileSystem *fs) {
+    for (int i = 0; i < NUM_BLOCKS; i++) {
+        printf("Index %d -> %s\n", fs->index[i], fs->data[i]);
+    }
+}
+
+int main() {
+    FileSystem fs;
+    initializeFileSystem(&fs);
+    displayFileSystem(&fs);
+    return 0;
+}
